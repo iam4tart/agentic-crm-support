@@ -23,21 +23,21 @@ graph TD
 
 ```mermaid
 graph TD
-    Start((User Query)) --> PlanNode["🧠 Plan Node\n(LLM Reasoner)"]
+    Start((User Query)) --> PlanNode["Plan Node\n(LLM Reasoner)"]
     
     PlanNode --> |"Generates Steps\ne.g., [retrieve, tool_call, respond]"| ExecNode["⚙️ Execute Steps Node"]
     
     subgraph "Dynamic Execution"
-        ExecNode -.-> |"Step: retrieve"| Retrieve["📚 RAG Retriever"]
-        ExecNode -.-> |"Step: tool_call"| Tools["🛠️ Jira Tools"]
-        ExecNode -.-> |"Step: respond"| Generator["💬 LLM Generator"]
+        ExecNode -.-> |"Step: retrieve"| Retrieve["RAG Retriever"]
+        ExecNode -.-> |"Step: tool_call"| Tools["Jira Tools"]
+        ExecNode -.-> |"Step: respond"| Generator["LLM Generator"]
     end
     
-    Generator --> EvalNode["⚖️ Evaluate Node\n(Evaluator)"]
+    Generator --> EvalNode["Evaluate Node\n(Evaluator)"]
     
     EvalNode --> Condition{"Score >= 0.7 or\nMax Retries Met?"}
     
-    Condition -->|"No (continue)"| Refine["🔄 Refine Query &\nIncrement Retry Count"]
+    Condition -->|"No (continue)"| Refine["Refine Query &\nIncrement Retry Count"]
     Refine --> PlanNode
     
     Condition -->|"Yes (end)"| Final((Final Output))
