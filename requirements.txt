@@ -14,3 +14,4 @@ langsmith
 ragas
 loguru
 notion-client
+pandas
