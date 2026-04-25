@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+pydantic
+pydantic-settings
+requests
+chromadb
+sentence-transformers
+transformers
+streamlit
+accelerate
+bitsandbytes
+langgraph
+langsmith
+ragas
+loguru
+notion-client

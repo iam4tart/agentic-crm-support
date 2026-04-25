@@ -1,0 +1,20 @@
+from pydantic_settings import BaseSettings
+
+class Settings(BaseSettings):
+    hf_token: str
+    notion_api_key: str
+    jira_base_url: str
+    jira_username: str
+    jira_api_token: str
+    langchain_tracing_v2: str = "true"
+    langchain_api_key: str = ""
+    langchain_project: str = "win-agent"
+    chroma_db_dir: str = "./chroma_db"
+    model_name: str = "mistralai/Mistral-7B-Instruct-v0.2"
+    embedding_model: str = "BAAI/bge-large-en-v1.5"
+    max_retries: int = 2
+
+    class Config:
+        env_file = ".env"
+
+settings = Settings()
