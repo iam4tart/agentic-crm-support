@@ -1,7 +1,6 @@
-version: '3.8'
-
 services:
   api:
+    image: ghcr.io/iam4tart/agentic-crm-support-api:latest
     build:
       context: .
       dockerfile: docker/Dockerfile.api
@@ -10,9 +9,12 @@ services:
     env_file:
       - .env
     volumes:
+      - .:/app
       - ./chroma_db:/app/chroma_db
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 
   ui:
+    image: ghcr.io/iam4tart/agentic-crm-support-ui:latest
     build:
       context: .
       dockerfile: docker/Dockerfile.ui
@@ -22,3 +24,5 @@ services:
       - api
     env_file:
       - .env
+    volumes:
+      - .:/app
