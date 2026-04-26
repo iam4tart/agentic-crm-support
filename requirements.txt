@@ -35,4 +35,3 @@ streamlit==1.36.0
 # Compatibility Fixes
 tiktoken
 openai
-pydantic-v1

@@ -6,10 +6,11 @@ from typing import List
 class Retriever:
     def __init__(self):
         if settings.chroma_api_key:
-            self.client = chromadb.CloudClient(
-                api_key=settings.chroma_api_key,
+            self.client = chromadb.HttpClient(
+                host="https://api.trychroma.com",
                 tenant=settings.chroma_tenant,
-                database=settings.chroma_database
+                database=settings.chroma_database,
+                headers={"X-Chroma-Token": settings.chroma_api_key}
             )
         else:
             self.client = chromadb.PersistentClient(path=settings.chroma_db_dir)

@@ -15,10 +15,11 @@ class CloudDatabasePopulator:
         if not settings.chroma_api_key:
             raise ValueError("CHROMA_API_KEY is not set.")
             
-        self.client = chromadb.CloudClient(
-            api_key=settings.chroma_api_key,
+        self.client = chromadb.HttpClient(
+            host="https://api.trychroma.com",
             tenant=settings.chroma_tenant,
-            database=settings.chroma_database
+            database=settings.chroma_database,
+            headers={"X-Chroma-Token": settings.chroma_api_key}
         )
         self.collection = self.client.get_or_create_collection(name="crm_support")
         os.environ["HF_TOKEN"] = settings.hf_token

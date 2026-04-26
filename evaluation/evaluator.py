@@ -1,5 +1,9 @@
-from ragas.metrics import faithfulness, answer_relevance
+from ragas.metrics import Faithfulness, AnswerRelevancy
 from ragas import evaluate
+
+# Initialize metric objects
+faithfulness = Faithfulness()
+answer_relevancy = AnswerRelevancy()
 from datasets import Dataset
 from loguru import logger
 from typing import Dict
@@ -19,12 +23,12 @@ class Evaluator:
         try:
             result = evaluate(
                 dataset,
-                metrics=[faithfulness, answer_relevance],
+                metrics=[faithfulness, answer_relevancy],
             )
-            score = (result.get("faithfulness", 0.0) + result.get("answer_relevance", 0.0)) / 2.0
+            score = (result.get("faithfulness", 0.0) + result.get("answer_relevancy", 0.0)) / 2.0
             return {
                 "faithfulness": result.get("faithfulness", 0.0),
-                "relevance": result.get("answer_relevance", 0.0),
+                "relevance": result.get("answer_relevancy", 0.0),
                 "score": score
             }
         except Exception as e:

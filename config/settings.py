@@ -13,11 +13,12 @@ class Settings(BaseSettings):
     chroma_api_key: str = ""
     chroma_tenant: str = ""
     chroma_database: str = "default"
-    model_name: str = "mistralai/Mistral-7B-Instruct-v0.2"
+    model_name: str = "microsoft/Phi-3-mini-4k-instruct"
     embedding_model: str = "BAAI/bge-large-en-v1.5"
     max_retries: int = 2
 
     class Config:
         env_file = ".env"
+        protected_namespaces = ('settings_',)
 
 settings = Settings()
