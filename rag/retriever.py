@@ -5,8 +5,16 @@ from typing import List
 
 class Retriever:
     def __init__(self):
-        self.client = chromadb.PersistentClient(path=settings.chroma_db_dir)
-        self.collection = self.client.get_or_create_collection(name="notion_docs")
+        if settings.chroma_api_key:
+            self.client = chromadb.CloudClient(
+                api_key=settings.chroma_api_key,
+                tenant=settings.chroma_tenant,
+                database=settings.chroma_database
+            )
+        else:
+            self.client = chromadb.PersistentClient(path=settings.chroma_db_dir)
+            
+        self.collection = self.client.get_or_create_collection(name="crm_support")
         self.model = SentenceTransformer(settings.embedding_model)
 
     def add_docs(self, docs: List[str], metadatas: List[dict], ids: List[str]):

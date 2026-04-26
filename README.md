@@ -25,7 +25,7 @@ graph TD
 graph TD
     Start((User Query)) --> PlanNode["Plan Node\n(LLM Reasoner)"]
     
-    PlanNode --> |"Generates Steps\ne.g., [retrieve, tool_call, respond]"| ExecNode["⚙️ Execute Steps Node"]
+    PlanNode --> |"Generates Steps\n[retrieve, tool_call, respond]"| ExecNode["Execute Steps Node"]
     
     subgraph "Dynamic Execution"
         ExecNode -.-> |"Step: retrieve"| Retrieve["RAG Retriever"]

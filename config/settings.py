@@ -8,8 +8,11 @@ class Settings(BaseSettings):
     jira_api_token: str
     langchain_tracing_v2: str = "true"
     langchain_api_key: str = ""
-    langchain_project: str = "win-agent"
+    langchain_project: str = "agent-crm-support"
     chroma_db_dir: str = "./chroma_db"
+    chroma_api_key: str = ""
+    chroma_tenant: str = ""
+    chroma_database: str = "default"
     model_name: str = "mistralai/Mistral-7B-Instruct-v0.2"
     embedding_model: str = "BAAI/bge-large-en-v1.5"
     max_retries: int = 2
