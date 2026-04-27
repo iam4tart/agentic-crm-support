@@ -1,3 +1,4 @@
+# Core API & Server
 fastapi==0.111.0
 uvicorn==0.30.1
 pydantic==2.7.4
@@ -6,14 +7,17 @@ requests==2.32.3
 loguru==0.7.2
 python-dotenv==1.0.1
 
+# AI & Orchestration
 langchain-core==0.2.35
 langgraph==0.1.4
-langchain-huggingface==0.0.3
 
+# Vector DB & Inference
 chromadb==0.5.5
 huggingface_hub==0.24.5
 
+# Data & UI
 pandas==2.2.2
 gradio==4.37.2
 
+# Performance
 astor==0.8.1

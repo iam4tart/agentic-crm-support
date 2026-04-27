@@ -14,9 +14,7 @@ class Reasoner:
             try:
                 logger.info(
                     f'Calling HF chat.completions: {settings.MODEL_NAME}')
-                completion = self.client.chat.completions.create(model=
-                    settings.MODEL_NAME, messages=messages, max_tokens=
-                    max_tokens)
+                completion = self.client.chat.completions.create(model=settings.MODEL_NAME, messages=messages, max_tokens=max_tokens)
                 return completion.choices[0].message.content
             except Exception as e:
                 if '503' in str(e) or 'Model loading' in str(e):

@@ -46,4 +46,3 @@ class Evaluator:
         except Exception as e:
             logger.error(f"Evaluation parsing error: {e}")
             return {"faithfulness": 0.4, "relevance": 0.4, "score": 0.4}
-        
