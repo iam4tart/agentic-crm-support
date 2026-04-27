@@ -3,7 +3,7 @@ from typing import Optional
 
 class Settings(BaseSettings):
     HF_TOKEN: str
-    MODEL_NAME: str = "Qwen/Qwen2.5-1.5B-Instruct:featherless-ai"
+    MODEL_NAME: str = "Qwen/Qwen2.5-1.5B-Instruct"
     EMBEDDING_MODEL: str = "BAAI/bge-large-en-v1.5"
     
     CHROMA_API_KEY: Optional[str] = None
