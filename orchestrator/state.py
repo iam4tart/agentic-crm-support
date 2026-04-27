@@ -1,6 +1,7 @@
 from typing import List, Dict, Any, TypedDict, Annotated
 import operator
 
+
 class GraphState(TypedDict):
     user_query: str
     retrieved_docs: List[str]

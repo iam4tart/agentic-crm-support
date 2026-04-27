@@ -5,7 +5,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  # Hardcoding the repo name in lowercase as Docker tags must be lowercase
   IMAGE_NAME: iam4tart/agentic-crm-support
 
 jobs:

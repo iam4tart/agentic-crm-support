@@ -1,38 +1,45 @@
 import chromadb
-from sentence_transformers import SentenceTransformer
 from config.settings import settings
 from typing import List
+from loguru import logger
+from huggingface_hub import InferenceClient
+
 
 class Retriever:
+
     def __init__(self):
-        if settings.chroma_api_key:
-            self.client = chromadb.HttpClient(
-                host="https://api.trychroma.com",
-                tenant=settings.chroma_tenant,
-                database=settings.chroma_database,
-                headers={"X-Chroma-Token": settings.chroma_api_key}
-            )
+        self.client = InferenceClient(token=settings.HF_TOKEN)
+        if settings.CHROMA_API_KEY:
+            self.client_db = chromadb.HttpClient(host=
+                'https://api.trychroma.com', tenant=settings.CHROMA_TENANT,
+                database=settings.CHROMA_DATABASE, headers={
+                'X-Chroma-Token': settings.CHROMA_API_KEY})
         else:
-            self.client = chromadb.PersistentClient(path=settings.chroma_db_dir)
-            
-        self.collection = self.client.get_or_create_collection(name="crm_support")
-        self.model = SentenceTransformer(settings.embedding_model)
+            self.client_db = chromadb.PersistentClient(path=settings.
+                CHROMA_DB_DIR)
+        self.collection = self.client_db.get_or_create_collection(name=
+            'crm_support')
+
+    def _get_embeddings(self, texts: List[str]) ->List[List[float]]:
+        try:
+            embeddings = self.client.feature_extraction(texts, model=
+                settings.EMBEDDING_MODEL)
+            if hasattr(embeddings, 'tolist'):
+                return embeddings.tolist()
+            return embeddings
+        except Exception as e:
+            logger.error(f'Embedding API Error: {e}')
+            return [[0.0] * 1024] * len(texts)
 
     def add_docs(self, docs: List[str], metadatas: List[dict], ids: List[str]):
-        embeddings = self.model.encode(docs).tolist()
-        self.collection.add(
-            embeddings=embeddings,
-            documents=docs,
-            metadatas=metadatas,
-            ids=ids
-        )
+        embeddings = self._get_embeddings(docs)
+        self.collection.add(embeddings=embeddings, documents=docs,
+            metadatas=metadatas, ids=ids)
 
-    def retrieve(self, query: str, top_k: int = 3) -> List[str]:
-        query_embedding = self.model.encode([query]).tolist()
-        results = self.collection.query(
-            query_embeddings=query_embedding,
-            n_results=top_k
-        )
+    def retrieve(self, query: str, top_k: int=3) ->List[str]:
+        query_embedding = self._get_embeddings([query])
+        results = self.collection.query(query_embeddings=query_embedding,
+            n_results=top_k)
         if results['documents']:
             return results['documents'][0]
         return []

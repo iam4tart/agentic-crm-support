@@ -1,18 +1,22 @@
+version: '3.8'
+
 services:
   api:
-    image: ghcr.io/iam4tart/agentic-crm-support-api:latest
+    build: .
     ports:
       - "8000:8000"
     env_file:
       - .env
-    volumes:
-      - ./chroma_db:/app/chroma_db
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000
+    restart: always
 
   ui:
-    image: ghcr.io/iam4tart/agentic-crm-support-ui:latest
+    build: .
     ports:
       - "8501:8501"
-    depends_on:
-      - api
     env_file:
       - .env
+    command: python ui/app.py
+    depends_on:
+      - api
+    restart: always

@@ -1,24 +1,28 @@
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
-    hf_token: str
-    notion_api_key: str
-    jira_base_url: str
-    jira_username: str
-    jira_api_token: str
-    langchain_tracing_v2: str = "true"
-    langchain_api_key: str = ""
-    langchain_project: str = "agent-crm-support"
-    chroma_db_dir: str = "./chroma_db"
-    chroma_api_key: str = ""
-    chroma_tenant: str = ""
-    chroma_database: str = "default"
-    model_name: str = "Qwen/Qwen2.5-1.5B-Instruct"
-    embedding_model: str = "BAAI/bge-large-en-v1.5"
-    max_retries: int = 2
+    HF_TOKEN: str
+    NOTION_API_KEY: str
+    JIRA_BASE_URL: str
+    JIRA_USERNAME: str
+    JIRA_API_TOKEN: str
+    JIRA_PROJECT_KEY: str = 'KAN'
+    LANGCHAIN_TRACING_V2: str = 'true'
+    LANGCHAIN_API_KEY: str = ''
+    LANGCHAIN_PROJECT: str = 'agent-crm-support'
+    CHROMA_DB_DIR: str = './chroma_db'
+    CHROMA_API_KEY: str = ''
+    CHROMA_TENANT: str = ''
+    CHROMA_DATABASE: str = 'default'
+    MODEL_NAME: str = 'Qwen/Qwen2.5-1.5B-Instruct:featherless-ai'
+    EMBEDDING_MODEL: str = 'BAAI/bge-large-en-v1.5'
+    MAX_RETRIES: int = 2
+
 
     class Config:
-        env_file = ".env"
-        protected_namespaces = ('settings_',)
+        env_file = '.env'
+        protected_namespaces = 'settings_',
+
 
 settings = Settings()
