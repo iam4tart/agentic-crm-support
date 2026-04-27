@@ -1,8 +1,8 @@
-> re-building
+> [THINKING BLOG](https://4t-audio.vercel.app/blog/agentic-crm-support)
 
 ```mermaid
 graph TD
-    A[User Query via Streamlit UI] -->|POST /query| B[FastAPI Endpoint]
+    A[User Query via Gradio UI] -->|POST /query| B[FastAPI Endpoint]
     B --> C{LangGraph Orchestrator}
     
     subgraph Agentic Workflow

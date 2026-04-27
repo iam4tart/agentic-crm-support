@@ -30,7 +30,6 @@ pandas==2.2.2
 
 # UI
 gradio==4.37.2
-streamlit==1.36.0
 
 # Compatibility Fixes
 tiktoken
