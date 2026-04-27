@@ -1,9 +1,9 @@
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -14,13 +14,22 @@ RUN pip install --user --no-cache-dir -r requirements.txt
 
 FROM python:3.11-slim
 
-WORKDIR /app
+RUN useradd -m -u 1000 user
+USER user
 
-COPY --from=builder /root/.local /root/.local
-COPY . .
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-ENV PATH=/root/.local/bin:$PATH
+WORKDIR /home/user/app
 
-EXPOSE 8000 8501
+COPY --from=builder --chown=user /root/.local /home/user/.local
 
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+COPY --chown=user . .
+
+RUN chmod +x start.sh
+
+EXPOSE 7860
+
+CMD ["./start.sh"]

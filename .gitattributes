@@ -1,0 +1,5 @@
+# Force shell scripts to LF so they execute correctly inside Linux containers
+*.sh text eol=lf
+
+# Force Dockerfile to LF
+Dockerfile text eol=lf

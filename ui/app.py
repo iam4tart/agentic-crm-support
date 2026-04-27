@@ -74,5 +74,5 @@ with gr.Blocks(title='Support Ticket Resolution') as demo:
         answer_output, reasoning_output, knowledge_output, tools_output,
         score_output])
 if __name__ == '__main__':
-    demo.launch(server_name='0.0.0.0', server_port=8501, share=False, theme
+    demo.launch(server_name='0.0.0.0', server_port=7860, share=False, theme
         =theme, css=css)
