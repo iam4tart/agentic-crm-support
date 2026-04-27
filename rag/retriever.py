@@ -11,17 +11,32 @@ class Retriever:
 
     def __init__(self):
         self.client = InferenceClient(token=settings.HF_TOKEN)
+        self.client_db = None
+        
         if settings.CHROMA_API_KEY:
-            # Using the v2 compatible configuration
-            self.client_db = chromadb.HttpClient(
-                host='https://api.trychroma.com',
-                ssl=True,
-                tenant=settings.CHROMA_TENANT,
-                database=settings.CHROMA_DATABASE,
-                headers={'X-Chroma-Token': settings.CHROMA_API_KEY},
-                settings=Settings(allow_reset=False, anonymized_telemetry=False)
-            )
-        else:
+            try:
+                logger.info("Attempting to connect to ChromaDB Cloud...")
+                # Modern Cloud v2 Connection string
+                self.client_db = chromadb.HttpClient(
+                    host='https://api.trychroma.com',
+                    ssl=True,
+                    tenant=settings.CHROMA_TENANT,
+                    database=settings.CHROMA_DATABASE,
+                    headers={'X-Chroma-Token': settings.CHROMA_API_KEY},
+                    settings=Settings(
+                        chroma_api_impl="chromadb.api.fastapi.FastAPI",
+                        anonymized_telemetry=False
+                    )
+                )
+                # Test the connection immediately
+                self.client_db.heartbeat()
+                logger.info("ChromaDB Cloud connected successfully.")
+            except Exception as e:
+                logger.error(f"ChromaDB Cloud connection failed: {e}. Falling back to local storage.")
+                self.client_db = None
+
+        if self.client_db is None:
+            logger.warning("Using local PersistentClient.")
             self.client_db = chromadb.PersistentClient(path=settings.CHROMA_DB_DIR)
         
         self.collection = self.client_db.get_or_create_collection(name='crm_support')
