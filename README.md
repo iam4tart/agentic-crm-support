@@ -1,3 +1,12 @@
+---
+title: Agentic CRM Support
+emoji: 🤖
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 > [THINKING BLOG](https://4t-audio.vercel.app/blog/agentic-crm-support)
 
 ```mermaid
