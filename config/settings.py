@@ -1,28 +1,28 @@
-from pydantic_settings import BaseSettings
-
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Optional
 
 class Settings(BaseSettings):
     HF_TOKEN: str
-    NOTION_API_KEY: str
+    MODEL_NAME: str = "Qwen/Qwen2.5-1.5B-Instruct:featherless-ai"
+    EMBEDDING_MODEL: str = "BAAI/bge-large-en-v1.5"
+    
+    CHROMA_API_KEY: Optional[str] = None
+    CHROMA_DB_DIR: str = "./data/chroma"
+    CHROMA_TENANT: str = "default"
+    CHROMA_DATABASE: str = "default"
+    
     JIRA_BASE_URL: str
     JIRA_USERNAME: str
     JIRA_API_TOKEN: str
-    JIRA_PROJECT_KEY: str = 'KAN'
-    LANGCHAIN_TRACING_V2: str = 'true'
-    LANGCHAIN_API_KEY: str = ''
-    LANGCHAIN_PROJECT: str = 'agent-crm-support'
-    CHROMA_DB_DIR: str = './chroma_db'
-    CHROMA_API_KEY: str = ''
-    CHROMA_TENANT: str = ''
-    CHROMA_DATABASE: str = 'default'
-    MODEL_NAME: str = 'Qwen/Qwen2.5-1.5B-Instruct:featherless-ai'
-    EMBEDDING_MODEL: str = 'BAAI/bge-large-en-v1.5'
+    JIRA_PROJECT_KEY: str = "KAN"
+    
+    LANGCHAIN_TRACING_V2: str = "false"
+    LANGCHAIN_ENDPOINT: str = "https://api.smith.langchain.com"
+    LANGCHAIN_API_KEY: Optional[str] = None
+    LANGCHAIN_PROJECT: str = "agentic-crm-support"
+    
     MAX_RETRIES: int = 2
 
-
-    class Config:
-        env_file = '.env'
-        protected_namespaces = 'settings_',
-
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 settings = Settings()
