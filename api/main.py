@@ -20,6 +20,10 @@ workflow = WorkflowGraph()
 class QueryRequest(BaseModel):
     query: str
 
+@app.get("/")
+async def health_check():
+    return {"status": "healthy"}
+
 @app.post("/query")
 async def process_query(request: QueryRequest):
     try:
