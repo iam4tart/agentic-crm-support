@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     chroma_api_key: str = ""
     chroma_tenant: str = ""
     chroma_database: str = "default"
-    model_name: str = "microsoft/Phi-3-mini-4k-instruct"
+    model_name: str = "Qwen/Qwen2.5-1.5B-Instruct"
     embedding_model: str = "BAAI/bge-large-en-v1.5"
     max_retries: int = 2
 
