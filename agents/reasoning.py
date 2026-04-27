@@ -9,18 +9,29 @@ from langsmith import traceable
 class Reasoner:
 
     def __init__(self):
-        self.client = InferenceClient(api_key=settings.HF_TOKEN)
+        self.client = InferenceClient(token=settings.HF_TOKEN)
 
-    @traceable(name="HF_Chat_Inference")
+    @traceable(name="HF_Text_Inference")
     def _query_api(self, messages: list, max_tokens: int=500) ->str:
+        # Convert messages to a single prompt string for text_generation stability
+        prompt = ""
+        for msg in messages:
+            role = msg['role'].upper()
+            content = msg['content']
+            prompt += f"\n<|{role}|>\n{content}\n"
+        prompt += "\n<|ASSISTANT|>\n"
+
         for _ in range(3):
             try:
-                logger.info(
-                    f'Calling HF chat.completions: {settings.MODEL_NAME}')
-                completion = self.client.chat.completions.create(model=
-                    settings.MODEL_NAME, messages=messages, max_tokens=
-                    max_tokens)
-                return completion.choices[0].message.content
+                logger.info(f'Calling HF text_generation: {settings.MODEL_NAME}')
+                response = self.client.text_generation(
+                    prompt=prompt,
+                    model=settings.MODEL_NAME,
+                    max_new_tokens=max_tokens,
+                    stop_sequences=["<|", "\n<|"],
+                    temperature=0.1
+                )
+                return response
             except Exception as e:
                 if '503' in str(e) or 'Model loading' in str(e):
                     logger.warning('Model loading, waiting 15s...')
@@ -36,7 +47,6 @@ class Reasoner:
             'You are a CRM planner. Output ONLY JSON.'}, {'role': 'user',
             'content':
             f"""Given the query: '{query}', create a JSON plan with a list of steps from [retrieve, analyze, tool_call, respond]. 
-CRITICAL: If the user explicitly asks to 'create a ticket' or 'use a tool', you MUST include 'tool_call' in the steps. 
 Output format: {{"steps": [...]}}"""
             }]
         result = self._query_api(messages, max_tokens=150)
@@ -52,7 +62,7 @@ Output format: {{"steps": [...]}}"""
     @traceable(name="Generate_Final_Response")
     def generate_response(self, query: str, context: str, tools: str) ->str:
         messages = [{'role': 'system', 'content':
-            'You are a Customer Support Expert. Use the provided Context and Tool results to give a DIRECT answer. \nIMPORTANT: If a Jira ticket was successfully created (check Tool Results), just provide the Ticket Key and a brief summary. DO NOT give manual instructions on how to create a ticket if you already did it.'
+            'You are a Customer Support Expert. Use the provided Context and Tool results to give a DIRECT answer.'
             }, {'role': 'user', 'content':
             f'Context Knowledge Base:\n{context}\n\nTool Results:\n{tools}\n\nUser Question: {query}'
             }]
