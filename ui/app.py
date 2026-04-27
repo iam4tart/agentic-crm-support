@@ -34,7 +34,9 @@ css = """
 .gr-box { border-radius: 8px; }
 div[data-testid="example-btn"] { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
 """
-with gr.Blocks(title='Support Ticket Resolution') as demo:
+
+# Theme must be passed to Blocks constructor
+with gr.Blocks(title='Support Ticket Resolution', theme=theme, css=css) as demo:
     with gr.Column(elem_classes='container'):
         gr.Markdown('# Support Ticket Resolution', elem_classes='header-text')
         gr.Markdown(
@@ -73,5 +75,7 @@ with gr.Blocks(title='Support Ticket Resolution') as demo:
     submit_btn.click(fn=process_ticket, inputs=query_input, outputs=[
         answer_output, reasoning_output, knowledge_output, tools_output,
         score_output])
+
 if __name__ == '__main__':
-    demo.launch(server_name='0.0.0.0', server_port=7860, share=False, theme=theme, css=css)
+    # Removed theme and css from launch as they are in Blocks constructor now
+    demo.launch(server_name='0.0.0.0', server_port=7860, share=False)
