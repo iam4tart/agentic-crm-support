@@ -3,26 +3,20 @@ from typing import Optional
 
 class Settings(BaseSettings):
     HF_TOKEN: str
-    MODEL_NAME: str = "mistralai/Mistral-7B-Instruct-v0.3"
-    EMBEDDING_MODEL: str = "BAAI/bge-large-en-v1.5"
-    
+    MODEL_NAME: str = 'Qwen/Qwen2.5-72B-Instruct'
+    EMBEDDING_MODEL: str = 'BAAI/bge-large-en-v1.5'
     CHROMA_API_KEY: Optional[str] = None
-    CHROMA_DB_DIR: str = "./data/chroma"
-    CHROMA_TENANT: str = "default"
-    CHROMA_DATABASE: str = "default"
-    
+    CHROMA_DB_DIR: str = './data/chroma'
+    CHROMA_TENANT: str = 'default'
+    CHROMA_DATABASE: str = 'default'
     JIRA_BASE_URL: str
     JIRA_USERNAME: str
     JIRA_API_TOKEN: str
-    JIRA_PROJECT_KEY: str = "KAN"
-    
-    LANGCHAIN_TRACING_V2: str = "false"
-    LANGCHAIN_ENDPOINT: str = "https://api.smith.langchain.com"
+    JIRA_PROJECT_KEY: str = 'KAN'
+    LANGCHAIN_TRACING_V2: str = 'false'
+    LANGCHAIN_ENDPOINT: str = 'https://api.smith.langchain.com'
     LANGCHAIN_API_KEY: Optional[str] = None
-    LANGCHAIN_PROJECT: str = "agentic-crm-support"
-    
+    LANGCHAIN_PROJECT: str = 'agentic-crm-support'
     MAX_RETRIES: int = 2
-
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
-
+    model_config = SettingsConfigDict(env_file='.env', extra='ignore')
 settings = Settings()

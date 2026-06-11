@@ -6,43 +6,27 @@ from loguru import logger
 from huggingface_hub import InferenceClient
 from langsmith import traceable
 
-
 class Retriever:
 
     def __init__(self):
         self.client = InferenceClient(token=settings.HF_TOKEN)
         self.client_db = None
-        
         if settings.CHROMA_API_KEY:
             try:
-                logger.info("Attempting to connect to ChromaDB Cloud...")
-                # Modern Cloud v2 Connection string
-                self.client_db = chromadb.HttpClient(
-                    host='https://api.trychroma.com',
-                    ssl=True,
-                    tenant=settings.CHROMA_TENANT,
-                    database=settings.CHROMA_DATABASE,
-                    headers={'X-Chroma-Token': settings.CHROMA_API_KEY},
-                    settings=Settings(
-                        chroma_api_impl="chromadb.api.fastapi.FastAPI",
-                        anonymized_telemetry=False
-                    )
-                )
-                # Test the connection immediately
+                logger.info('Attempting to connect to ChromaDB Cloud...')
+                self.client_db = chromadb.HttpClient(host='https://api.trychroma.com', ssl=True, tenant=settings.CHROMA_TENANT, database=settings.CHROMA_DATABASE, headers={'X-Chroma-Token': settings.CHROMA_API_KEY}, settings=Settings(chroma_api_impl='chromadb.api.fastapi.FastAPI', anonymized_telemetry=False))
                 self.client_db.heartbeat()
-                logger.info("ChromaDB Cloud connected successfully.")
+                logger.info('ChromaDB Cloud connected successfully.')
             except Exception as e:
-                logger.error(f"ChromaDB Cloud connection failed: {e}. Falling back to local storage.")
+                logger.error(f'ChromaDB Cloud connection failed: {e}. Falling back to local storage.')
                 self.client_db = None
-
         if self.client_db is None:
-            logger.warning("Using local PersistentClient.")
+            logger.warning('Using local PersistentClient.')
             self.client_db = chromadb.PersistentClient(path=settings.CHROMA_DB_DIR)
-        
         self.collection = self.client_db.get_or_create_collection(name='crm_support')
 
-    @traceable(name="Embedding_Generation")
-    def _get_embeddings(self, texts: List[str]) ->List[List[float]]:
+    @traceable(name='Embedding_Generation')
+    def _get_embeddings(self, texts: List[str]) -> List[List[float]]:
         try:
             embeddings = self.client.feature_extraction(texts, model=settings.EMBEDDING_MODEL)
             if hasattr(embeddings, 'tolist'):
@@ -56,8 +40,8 @@ class Retriever:
         embeddings = self._get_embeddings(docs)
         self.collection.add(embeddings=embeddings, documents=docs, metadatas=metadatas, ids=ids)
 
-    @traceable(name="Chroma_Retrieval")
-    def retrieve(self, query: str, top_k: int=3) ->List[str]:
+    @traceable(name='Chroma_Retrieval')
+    def retrieve(self, query: str, top_k: int=3) -> List[str]:
         query_embedding = self._get_embeddings([query])
         results = self.collection.query(query_embeddings=query_embedding, n_results=top_k)
         if results['documents']:

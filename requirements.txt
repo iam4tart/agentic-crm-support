@@ -1,5 +1,5 @@
 fastapi==0.111.0
-uvicorn==0.30.1
+uvicorn[standard]==0.30.1
 pydantic==2.7.4
 pydantic-settings==2.3.4
 requests==2.32.3
@@ -13,3 +13,8 @@ pandas==2.2.2
 gradio==4.44.1
 astor==0.8.1
 langsmith==0.1.93
+mcp
+websockets>=12.0
+websocket-client>=1.8.0
+tenacity>=8.2.3
+composio>=0.7.0

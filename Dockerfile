@@ -5,7 +5,6 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Install build-essential, dos2unix, and curl
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     dos2unix \
@@ -19,7 +18,6 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install curl and dos2unix in the final image
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     dos2unix \
@@ -28,7 +26,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=builder /root/.local /root/.local
 COPY . .
 
-# Fix line endings and permissions
 RUN dos2unix start.sh && chmod +x start.sh
 
 ENV PATH=/root/.local/bin:$PATH

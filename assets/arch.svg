@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1001.1969999999999 1647.9" width="1001.1969999999999" height="1647.9" style="--bg:#1F1F1F;--fg:#CCCCCC;--line:#CCCCCC;--accent:#0078D4;--muted:#CCCCCCCC;--surface:#181818;--border:#CCCCCC;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<g class="subgraph" data-id="Triggers__Client_Layer" data-label="Triggers &amp; Client Layer">
+  <rect x="171.5263" y="40" width="423.99799999999993" height="113.80000000000001" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="171.5263" y="40" width="423.99799999999993" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="183.5263" y="54" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Triggers &amp; Client Layer</text>
+</g>
+<g class="subgraph" data-id="Application_Core" data-label="Application Core">
+  <rect x="184.0811" y="282.1" width="398.7943333333333" height="925.6" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="184.0811" y="282.1" width="398.7943333333333" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="196.0811" y="296.1" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Application Core</text>
+<g class="subgraph" data-id="Agentic_Orchestrator_LangGraph" data-label="Agentic Orchestrator (LangGraph)">
+  <rect x="200.0811" y="502.20000000000005" width="366.7943333333333" height="683.5" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="200.0811" y="502.20000000000005" width="366.7943333333333" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="212.0811" y="516.2" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Agentic Orchestrator (LangGraph)</text>
+</g>
+</g>
+<g class="subgraph" data-id="Intelligence__Memory" data-label="Intelligence &amp; Memory">
+  <rect x="40" y="1336" width="425.47999999999996" height="151.8" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="40" y="1336" width="425.47999999999996" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="52" y="1350" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Intelligence &amp; Memory</text>
+</g>
+<g class="subgraph" data-id="Integrations_Layer_Destination" data-label="Integrations Layer (Destination)">
+  <rect x="493.47999999999996" y="1324" width="467.717" height="283.90000000000003" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="493.47999999999996" y="1324" width="467.717" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="505.47999999999996" y="1338" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Integrations Layer (Destination)</text>
+</g>
+<polyline class="edge" data-from="UI" data-to="API" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Query / Stream" points="272.59779999999995,137.8 272.5978,264.1 297.2416,264.1 297.2416,326.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="WH" data-to="API" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Ticket Updates / Triggers" points="482.5968,137.8 482.5967999999999,195.8 435.6713,195.8 435.6713,264.1 355.68493333333333,264.1 355.68493333333333,326.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="API" data-to="TR" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Init State" points="142.38216666666665,97.80000000000001 142.38216666666665,264.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="TR" data-to="LLM" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Classify" points="299.2176,600 299.2176,612 216.0811,612 216.0811,1237.7 98.47412499999999,1237.7 98.47412499999999,1318 105.20474999999999,1318 105.20474999999999,1404" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="EX" data-to="LLM" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Generate" points="258.5903,803.6000000000001 258.59029999999996,1249.7 161.14012499999998,1249.7 161.14012499999998,1318 154.40949999999998,1318 154.40949999999998,1404" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="GT" data-to="LLM" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Grade Output" points="407.62376666666665,905.4000000000001 407.62376666666665,917.4000000000001 391.8754333333333,917.4000000000001 391.8754333333333,1225.7 779.5703749999998,1225.7 779.5703749999998,1294 375.1495,1294 375.1495,1392 203.61424999999997,1392 203.61424999999997,1404" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="EX" data-to="DB" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Fetch Context" points="290.0995,803.6000000000001 290.0995,1249.7 288.459125,1249.7 288.459125,1318 365.1495,1318 365.1495,1404" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="EX" data-to="BR" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Route Intent" points="321.6087,803.6000000000001 321.6087,1237.7 700.3663749999998,1237.7 700.3663749999998,1306 709.73975,1306 709.73975,1368" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="TR" data-to="PL" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="353.70893333333333,600 353.70893333333333,612 383.4906,612 383.4906,648" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="PL" data-to="EX" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="359.20893333333333,701.8000000000001 359.20893333333333,713.8000000000001 305.8541,713.8000000000001 305.8541,749.8000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="EX" data-to="GT" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="353.11789999999996,803.6000000000001 353.11789999999996,815.6000000000001 407.62376666666665,815.6000000000001 407.62376666666665,851.6000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="GT" data-to="PL" data-style="dotted" data-arrow-start="false" data-arrow-end="true" data-label="Score &lt; 0.8 (Retry)" points="461.1271,851.6000000000001 461.1271,713.8000000000001 407.77226666666667,713.8000000000001 407.77226666666667,701.8000000000001" fill="none" stroke="var(--_line)" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="GT" data-to="Done" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Score &gt;= 0.8" points="461.1271,905.4000000000001 461.1271,917.4000000000001 476.8754333333333,917.4000000000001 476.8754333333333,1021.7" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="BR" data-to="Jira" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="OAuth / API Exec" points="678.5420833333333,1421.8 678.5420833333333,1433.8 593.8104999999999,1433.8 593.8104999999999,1538.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="BR" data-to="Linear" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="OAuth / API Exec" points="740.9374166666666,1421.8 740.9374166666666,1433.8 825.6689999999999,1433.8 825.6689999999999,1538.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<g class="edge-label" data-from="UI" data-to="API" data-label="Query / Stream">
+  <rect x="228.5978" y="202.8" width="87.14800000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="272.1718" y="217.95000000000002" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Query / Stream</text>
+</g>
+<g class="edge-label" data-from="WH" data-to="API" data-label="Ticket Updates / Triggers">
+  <rect x="366.6713" y="202.8" width="137.63800000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="435.4903" y="217.95000000000002" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Ticket Updates / Triggers</text>
+</g>
+<g class="edge-label" data-from="API" data-to="TR" data-label="Init State">
+  <rect x="113.88216666666668" y="140.8" width="56.26" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="142.01216666666667" y="155.95000000000002" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Init State</text>
+</g>
+<g class="edge-label" data-from="TR" data-to="LLM" data-label="Classify">
+  <rect x="70.47412499999999" y="1256.7" width="55.666000000000004" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="98.30712499999998" y="1271.8500000000001" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Classify</text>
+</g>
+<g class="edge-label" data-from="EX" data-to="LLM" data-label="Generate">
+  <rect x="130.14012499999998" y="1256.7" width="61.606" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="160.94312499999998" y="1271.8500000000001" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Generate</text>
+</g>
+<g class="edge-label" data-from="GT" data-to="LLM" data-label="Grade Output">
+  <rect x="740.0703749999998" y="1244.7" width="78.83200000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="779.4863749999998" y="1259.8500000000001" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Grade Output</text>
+</g>
+<g class="edge-label" data-from="EX" data-to="DB" data-label="Fetch Context">
+  <rect x="246.95912499999994" y="1256.7" width="82.39600000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="288.15712499999995" y="1271.8500000000001" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Fetch Context</text>
+</g>
+<g class="edge-label" data-from="EX" data-to="BR" data-label="Route Intent">
+  <rect x="664.3663749999998" y="1244.7" width="71.70400000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="700.2183749999998" y="1259.8500000000001" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Route Intent</text>
+</g>
+<g class="edge-label" data-from="GT" data-to="PL" data-label="Score &lt; 0.8 (Retry)">
+  <rect x="408.6270999999999" y="761.5500000000001" width="104.96800000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="461.11109999999996" y="776.7" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Score &lt; 0.8 (Retry)</text>
+</g>
+<g class="edge-label" data-from="GT" data-to="Done" data-label="Score &gt;= 0.8">
+  <rect x="437.8754333333334" y="948.4000000000001" width="77.05000000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="476.40043333333335" y="963.5500000000001" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Score &gt;= 0.8</text>
+</g>
+<g class="edge-label" data-from="BR" data-to="Jira" data-label="OAuth / API Exec">
+  <rect x="545.3104999999999" y="1464.8" width="96.058" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="593.3394999999999" y="1479.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">OAuth / API Exec</text>
+</g>
+<g class="edge-label" data-from="BR" data-to="Linear" data-label="OAuth / API Exec">
+  <rect x="777.1689999999999" y="1464.8" width="96.058" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="825.1979999999999" y="1479.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">OAuth / API Exec</text>
+</g>
+<g class="node" data-id="UI" data-label="Gradio UI 
+ (WebSockets / HTTP)" data-shape="rectangle">
+  <rect x="187.5263" y="84" width="170.14299999999997" height="53.800000000000004" rx="0" ry="0" fill="#2d3436" stroke="#dfe6e9" stroke-width="2px" />
+  <text x="272.5978" y="110.9" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="272.5978" dy="-3.9000000000000012">Gradio UI </tspan><tspan x="272.5978" dy="16.900000000000002"> (WebSockets / HTTP)</tspan></text>
+</g>
+<g class="node" data-id="WH" data-label="Jira Webhooks 
+ (Inbound Event Payloads)" data-shape="rectangle">
+  <rect x="385.66929999999996" y="84" width="193.855" height="53.800000000000004" rx="0" ry="0" fill="#2d3436" stroke="#dfe6e9" stroke-width="2px" />
+  <text x="482.5968" y="110.9" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="482.5968" dy="-3.9000000000000012">Jira Webhooks </tspan><tspan x="482.5968" dy="16.900000000000002"> (Inbound Event Payloads)</tspan></text>
+</g>
+<g class="node" data-id="API" data-label="FastAPI Gateway 
+ (Event Bus &amp; Dispatch)" data-shape="rectangle">
+  <rect x="238.79826666666668" y="326.1" width="175.32999999999998" height="53.800000000000004" rx="0" ry="0" fill="#0984e3" stroke="#74b9ff" stroke-width="2px" />
+  <text x="326.46326666666664" y="353" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="326.46326666666664" dy="-3.9000000000000012">FastAPI Gateway </tspan><tspan x="326.46326666666664" dy="16.900000000000002"> (Event Bus &amp; Dispatch)</tspan></text>
+</g>
+<g class="node" data-id="TR" data-label="Triage Node 
+ (Intent Classification)" data-shape="rectangle">
+  <rect x="244.72626666666667" y="546.2" width="163.474" height="53.800000000000004" rx="0" ry="0" fill="#00b894" stroke="#55efc4" stroke-width="2px" />
+  <text x="326.46326666666664" y="573.1" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="326.46326666666664" dy="-3.9000000000000012">Triage Node </tspan><tspan x="326.46326666666664" dy="16.900000000000002"> (Intent Classification)</tspan></text>
+</g>
+<g class="node" data-id="PL" data-label="Plan Node 
+ (Step Generation)" data-shape="rectangle">
+  <rect x="310.6456" y="648" width="145.69" height="53.800000000000004" rx="0" ry="0" fill="#00b894" stroke="#55efc4" stroke-width="2px" />
+  <text x="383.4906" y="674.9" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="383.4906" dy="-3.9000000000000012">Plan Node </tspan><tspan x="383.4906" dy="16.900000000000002"> (Step Generation)</tspan></text>
+</g>
+<g class="node" data-id="EX" data-label="Execute Node 
+ (RAG &amp; Tools Exec)" data-shape="rectangle">
+  <rect x="227.0811" y="749.8000000000001" width="157.546" height="53.800000000000004" rx="0" ry="0" fill="#00b894" stroke="#55efc4" stroke-width="2px" />
+  <text x="305.8541" y="776.7" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="305.8541" dy="-3.9000000000000012">Execute Node </tspan><tspan x="305.8541" dy="16.900000000000002"> (RAG &amp; Tools Exec)</tspan></text>
+</g>
+<g class="node" data-id="GT" data-label="Gate / Critique 
+ (Agentic Evaluation)" data-shape="rectangle">
+  <rect x="354.1204333333333" y="851.6000000000001" width="160.51" height="53.800000000000004" rx="0" ry="0" fill="#00b894" stroke="#55efc4" stroke-width="2px" />
+  <text x="434.3754333333333" y="878.5000000000001" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="434.3754333333333" dy="-3.9000000000000012">Gate / Critique </tspan><tspan x="434.3754333333333" dy="16.900000000000002"> (Agentic Evaluation)</tspan></text>
+</g>
+<g class="node" data-id="Done" data-label="Final Response" data-shape="circle">
+  <circle cx="476.8754333333333" cy="1095.7" r="74" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="476.8754333333333" y="1095.7" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Final Response</text>
+</g>
+<g class="node" data-id="LLM" data-label="Hugging Face Serverless 
+ (Qwen-2.5-72B-Instruct)" data-shape="rectangle">
+  <rect x="56" y="1404" width="196.81899999999996" height="53.800000000000004" rx="0" ry="0" fill="#e84393" stroke="#fd79a8" stroke-width="2px" />
+  <text x="154.40949999999998" y="1430.9" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="154.40949999999998" dy="-3.9000000000000012">Hugging Face Serverless </tspan><tspan x="154.40949999999998" dy="16.900000000000002"> (Qwen-2.5-72B-Instruct)</tspan></text>
+</g>
+<g class="node" data-id="DB" data-label="ChromaDB Cloud 
+ (Semantic RAG Store)" data-shape="cylinder">
+  <rect x="280.81899999999996" y="1411" width="168.661" height="53.80000000000001" fill="#6c5ce7" stroke="none" />
+  <line x1="280.81899999999996" y1="1411" x2="280.81899999999996" y2="1464.8" stroke="#a29bfe" stroke-width="2px" />
+  <line x1="449.47999999999996" y1="1411" x2="449.47999999999996" y2="1464.8" stroke="#a29bfe" stroke-width="2px" />
+  <ellipse cx="365.1495" cy="1464.8" rx="84.3305" ry="7" fill="#6c5ce7" stroke="#a29bfe" stroke-width="2px" />
+  <ellipse cx="365.1495" cy="1411" rx="84.3305" ry="7" fill="#6c5ce7" stroke="#a29bfe" stroke-width="2px" />
+  <text x="365.1495" y="1437.9" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="365.1495" dy="-3.9000000000000012">ChromaDB Cloud </tspan><tspan x="365.1495" dy="16.900000000000002"> (Semantic RAG Store)</tspan></text>
+</g>
+<g class="node" data-id="BR" data-label="Composio MCP Bridge 
+ (Model Context Protocol)" data-shape="rectangle">
+  <rect x="616.14675" y="1368" width="187.18599999999998" height="53.800000000000004" rx="0" ry="0" fill="#e17055" stroke="#fab1a0" stroke-width="2px" />
+  <text x="709.73975" y="1394.9" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="709.73975" dy="-3.9000000000000012">Composio MCP Bridge </tspan><tspan x="709.73975" dy="16.900000000000002"> (Model Context Protocol)</tspan></text>
+</g>
+<g class="node" data-id="Jira" data-label="Jira 
+ (Tech/Billing Tickets)" data-shape="rectangle">
+  <rect x="509.47999999999996" y="1538.1" width="168.661" height="53.800000000000004" rx="0" ry="0" fill="#d63031" stroke="#ff7675" stroke-width="2px" />
+  <text x="593.8104999999999" y="1565" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="593.8104999999999" dy="-3.9000000000000012">Jira </tspan><tspan x="593.8104999999999" dy="16.900000000000002"> (Tech/Billing Tickets)</tspan></text>
+</g>
+<g class="node" data-id="Linear" data-label="Linear 
+ (Product Requests &amp; Escalations)" data-shape="rectangle">
+  <rect x="706.141" y="1538.1" width="239.05599999999995" height="53.800000000000004" rx="0" ry="0" fill="#d63031" stroke="#ff7675" stroke-width="2px" />
+  <text x="825.669" y="1565" text-anchor="middle" font-size="13" font-weight="500" fill="#fff"><tspan x="825.669" dy="-3.9000000000000012">Linear </tspan><tspan x="825.669" dy="16.900000000000002"> (Product Requests &amp; Escalations)</tspan></text>
+</g>
+</svg>

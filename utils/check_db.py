@@ -1,7 +1,6 @@
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-
 class DatabaseChecker:
 
     def __init__(self):
@@ -28,8 +27,7 @@ class DatabaseChecker:
     def query_db(self, query: str):
         print(f'Querying: {query}')
         embedding = self.model.encode([query]).tolist()
-        results = self.collection.query(query_embeddings=embedding,
-            n_results=3, include=['documents', 'metadatas', 'distances'])
+        results = self.collection.query(query_embeddings=embedding, n_results=3, include=['documents', 'metadatas', 'distances'])
         for i in range(len(results['documents'][0])):
             doc = results['documents'][0][i]
             meta = results['metadatas'][0][i]
@@ -49,8 +47,6 @@ class DatabaseChecker:
                     self.query_db(user_query)
             except KeyboardInterrupt:
                 break
-
-
 if __name__ == '__main__':
     try:
         checker = DatabaseChecker()

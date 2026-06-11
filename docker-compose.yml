@@ -7,16 +7,22 @@ services:
       - "8000:8000"
     env_file:
       - .env
-    command: uvicorn api.main:app --host 0.0.0.0 --port 8000
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000 --ws websockets
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   ui:
     build: .
     ports:
-      - "8501:8501"
+      - "7860:7860"
     env_file:
       - .env
     command: python ui/app.py
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     restart: always

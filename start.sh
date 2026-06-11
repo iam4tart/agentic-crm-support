@@ -1,10 +1,8 @@
 #!/bin/bash
 
-# Start the FastAPI Backend in the background
 echo "Starting FastAPI Backend..."
 uvicorn api.main:app --host 0.0.0.0 --port 8000 &
 
-# Wait for the backend to be ready
 echo "Waiting for Backend to start on port 8000..."
 max_retries=30
 count=0

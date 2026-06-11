@@ -4,7 +4,6 @@ from rag.retriever import Retriever
 from loguru import logger
 import uuid
 
-
 class NotionIngestor:
 
     def __init__(self):
@@ -18,10 +17,8 @@ class NotionIngestor:
         metadatas = []
         ids = []
         for block in blocks.get('results', []):
-            if block['type'] == 'paragraph' and block['paragraph']['rich_text'
-                ]:
-                text = ' '.join([t['plain_text'] for t in block['paragraph'
-                    ]['rich_text']])
+            if block['type'] == 'paragraph' and block['paragraph']['rich_text']:
+                text = ' '.join([t['plain_text'] for t in block['paragraph']['rich_text']])
                 docs.append(text)
                 metadatas.append({'source': f'notion_{page_id}'})
                 ids.append(str(uuid.uuid4()))
