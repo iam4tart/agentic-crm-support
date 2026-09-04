@@ -58,7 +58,28 @@ async def process_query(request: QueryRequest):
         loop = asyncio.get_event_loop()
         result = await loop.run_in_executor(None, workflow.run, request.query)
         logger.info(f'[API /query] Result keys: {list(result.keys())}')
-        return {'final_answer': result.get('final_answer', ''), 'reasoning_steps': result.get('reasoning_steps', []), 'retrieved_docs': result.get('retrieved_docs', []), 'tool_outputs': result.get('tool_outputs', []), 'evaluation_score': result.get('evaluation_score', 0.0), 'intent': result.get('intent', 'general'), 'crm_server': result.get('crm_server', 'jira'), 'ticket_key': result.get('ticket_key', '')}
+        metrics = {
+            'total_latency_ms': round(result.get('total_latency_ms', 0.0), 2),
+            'retrieval_latency_ms': round(result.get('retrieval_latency_ms', 0.0), 2),
+            'llm_latency_ms': round(result.get('llm_latency_ms', 0.0), 2),
+            'mcp_latency_ms': round(result.get('mcp_latency_ms', 0.0), 2),
+            'prompt_tokens': result.get('prompt_tokens', 0),
+            'completion_tokens': result.get('completion_tokens', 0),
+            'total_tokens': result.get('total_tokens', 0),
+            'retry_count': result.get('retry_count', 0),
+            'failure_reason': result.get('failure_reason', 'None')
+        }
+        return {
+            'final_answer': result.get('final_answer', ''),
+            'reasoning_steps': result.get('reasoning_steps', []),
+            'retrieved_docs': result.get('retrieved_docs', []),
+            'tool_outputs': result.get('tool_outputs', []),
+            'evaluation_score': result.get('evaluation_score', 0.0),
+            'intent': result.get('intent', 'general'),
+            'crm_server': result.get('crm_server', 'jira'),
+            'ticket_key': result.get('ticket_key', ''),
+            'metrics': metrics
+        }
     except Exception as e:
         logger.error(f'[API /query] Error: {e}')
         raise HTTPException(status_code=500, detail=str(e))

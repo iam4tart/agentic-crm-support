@@ -10,6 +10,7 @@ class Reasoner:
 
     def __init__(self):
         self.client = InferenceClient(base_url='https://router.huggingface.co/v1', token=settings.HF_TOKEN)
+        self.last_usage = {'prompt_tokens': 0, 'completion_tokens': 0, 'total_tokens': 0}
 
     @traceable(name='HF_Chat_Inference')
     def _query_api(self, messages: list, max_tokens: int=500) -> str:
@@ -18,6 +19,12 @@ class Reasoner:
             try:
                 logger.info(f'[Reasoner] chat_completion attempt {attempt + 1}: {settings.MODEL_NAME}')
                 response = self.client.chat_completion(messages=messages, model=settings.MODEL_NAME, max_tokens=max_tokens, temperature=0.1)
+                if hasattr(response, 'usage') and response.usage:
+                    self.last_usage = {
+                        'prompt_tokens': getattr(response.usage, 'prompt_tokens', 0) or 0,
+                        'completion_tokens': getattr(response.usage, 'completion_tokens', 0) or 0,
+                        'total_tokens': getattr(response.usage, 'total_tokens', 0) or 0,
+                    }
                 return response.choices[0].message.content
             except Exception as e:
                 last_error = str(e)

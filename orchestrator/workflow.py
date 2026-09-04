@@ -1,4 +1,5 @@
 import asyncio
+import time
 from langgraph.graph import StateGraph, END
 from orchestrator.state import GraphState
 from orchestrator.nodes import WorkflowNodes
@@ -23,7 +24,31 @@ class WorkflowGraph:
         self.app = self.workflow.compile()
 
     def _build_initial_state(self, query: str, ws_session_id: str='', event_source: str='ui', streaming_mode: str='steps') -> dict:
-        return {'user_query': query, 'retrieved_docs': [], 'reasoning_steps': [], 'tool_outputs': [], 'final_answer': '', 'evaluation_score': 0.0, 'retry_count': 0, 'intent': 'general', 'intent_confidence': 0.0, 'ticket_key': '', 'crm_server': 'jira', 'event_source': event_source, 'ws_session_id': ws_session_id, 'streaming_mode': streaming_mode}
+        return {
+            'user_query': query,
+            'retrieved_docs': [],
+            'reasoning_steps': [],
+            'tool_outputs': [],
+            'final_answer': '',
+            'evaluation_score': 0.0,
+            'retry_count': 0,
+            'intent': 'general',
+            'intent_confidence': 0.0,
+            'ticket_key': '',
+            'crm_server': 'jira',
+            'event_source': event_source,
+            'ws_session_id': ws_session_id,
+            'streaming_mode': streaming_mode,
+            'start_time': time.perf_counter(),
+            'total_latency_ms': 0.0,
+            'retrieval_latency_ms': 0.0,
+            'llm_latency_ms': 0.0,
+            'mcp_latency_ms': 0.0,
+            'prompt_tokens': 0,
+            'completion_tokens': 0,
+            'total_tokens': 0,
+            'failure_reason': ''
+        }
 
     def run(self, query: str) -> dict:
         logger.info(f'[Workflow] sync run: {query[:80]}')

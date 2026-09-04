@@ -14,20 +14,112 @@ except ImportError:
 API_BASE = 'http://localhost:8000'
 WS_BASE = 'ws://localhost:8000'
 
+def _format_metrics_cards(metrics: dict = None) -> str:
+    tot_lat = max(metrics.get('total_latency_ms', 0.0), 0.0) if metrics else 0.0
+    ret_lat = max(metrics.get('retrieval_latency_ms', 0.0), 0.0) if metrics else 0.0
+    llm_lat = max(metrics.get('llm_latency_ms', 0.0), 0.0) if metrics else 0.0
+    mcp_lat = max(metrics.get('mcp_latency_ms', 0.0), 0.0) if metrics else 0.0
+
+    p_tok = max(metrics.get('prompt_tokens', 0), 0) if metrics else 0
+    c_tok = max(metrics.get('completion_tokens', 0), 0) if metrics else 0
+    t_tok = max(metrics.get('total_tokens', 0), (p_tok + c_tok)) if metrics else 0
+
+    effective_total_ms = tot_lat if tot_lat > 0 else (ret_lat + llm_lat + mcp_lat)
+    denom_ms = effective_total_ms if effective_total_ms > 0 else 1.0
+
+    ret_pct = round((ret_lat / denom_ms) * 100) if effective_total_ms > 0 else 0
+    llm_pct = round((llm_lat / denom_ms) * 100) if effective_total_ms > 0 else 0
+    mcp_pct = round((mcp_lat / denom_ms) * 100) if effective_total_ms > 0 else 0
+
+    denom_tok = t_tok if t_tok > 0 else 1
+    p_pct = round((p_tok / denom_tok) * 100) if t_tok > 0 else 0
+    c_pct = round((c_tok / denom_tok) * 100) if t_tok > 0 else 0
+
+    ret_s = f"{ret_lat/1000.0:.2f}s" if ret_lat >= 1000 else f"{ret_lat:.0f}ms"
+    llm_s = f"{llm_lat/1000.0:.2f}s" if llm_lat >= 1000 else f"{llm_lat:.0f}ms"
+    mcp_s = f"{mcp_lat/1000.0:.2f}s" if mcp_lat >= 1000 else f"{mcp_lat:.0f}ms"
+    tot_s = f"{effective_total_ms/1000.0:.2f}s" if effective_total_ms >= 1000 else f"{effective_total_ms:.0f}ms"
+
+    return f"""
+    <div style="background: var(--block-background-fill, #f8fafc); border: 1px solid var(--border-color-primary, #e2e8f0); border-radius: 8px; padding: 10px 14px; font-family: inherit; width: 100%; box-sizing: border-box;">
+        
+        <div style="margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--body-text-color-subdued, #64748b);">Latency</span>
+                <span style="font-size: 12px; font-weight: 700; color: #0284c7; background: rgba(2, 132, 199, 0.1); padding: 1px 7px; border-radius: 4px;">Total: {tot_s}</span>
+            </div>
+            
+            <div style="display: flex; height: 8px; width: 100%; background: var(--background-fill-secondary, #e2e8f0); border-radius: 4px; overflow: hidden; margin-bottom: 6px;">
+                <div style="width: {ret_pct}%; background: #0284c7;" title="RAG Retrieval: {ret_s} ({ret_pct}%)"></div>
+                <div style="width: {llm_pct}%; background: #6366f1;" title="LLM Inference: {llm_s} ({llm_pct}%)"></div>
+                <div style="width: {mcp_pct}%; background: #059669;" title="MCP / Tools: {mcp_s} ({mcp_pct}%)"></div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; font-size: 11px;">
+                <div style="background: var(--background-fill-primary, #ffffff); border: 1px solid var(--border-color-primary, #e2e8f0); border-radius: 4px; padding: 4px 6px;">
+                    <div style="color: var(--body-text-color-subdued, #64748b); font-size: 10px; font-weight: 600;">
+                        <span style="display: inline-block; width: 7px; height: 7px; background: #0284c7; border-radius: 2px; margin-right: 3px;"></span>RAG Doc
+                    </div>
+                    <div style="font-weight: 600; color: var(--body-text-color, #0f172a); margin-top: 1px;">{ret_s} <span style="font-size: 10px; opacity: 0.7;">({ret_pct}%)</span></div>
+                </div>
+                <div style="background: var(--background-fill-primary, #ffffff); border: 1px solid var(--border-color-primary, #e2e8f0); border-radius: 4px; padding: 4px 6px;">
+                    <div style="color: var(--body-text-color-subdued, #64748b); font-size: 10px; font-weight: 600;">
+                        <span style="display: inline-block; width: 7px; height: 7px; background: #6366f1; border-radius: 2px; margin-right: 3px;"></span>LLM Gen
+                    </div>
+                    <div style="font-weight: 600; color: var(--body-text-color, #0f172a); margin-top: 1px;">{llm_s} <span style="font-size: 10px; opacity: 0.7;">({llm_pct}%)</span></div>
+                </div>
+                <div style="background: var(--background-fill-primary, #ffffff); border: 1px solid var(--border-color-primary, #e2e8f0); border-radius: 4px; padding: 4px 6px;">
+                    <div style="color: var(--body-text-color-subdued, #64748b); font-size: 10px; font-weight: 600;">
+                        <span style="display: inline-block; width: 7px; height: 7px; background: #059669; border-radius: 2px; margin-right: 3px;"></span>MCP Tools
+                    </div>
+                    <div style="font-weight: 600; color: var(--body-text-color, #0f172a); margin-top: 1px;">{mcp_s} <span style="font-size: 10px; opacity: 0.7;">({mcp_pct}%)</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--body-text-color-subdued, #64748b);">Token Usage</span>
+                <span style="font-size: 12px; font-weight: 700; color: var(--body-text-color, #334155); background: var(--background-fill-secondary, #e2e8f0); padding: 1px 7px; border-radius: 4px;">Total: {t_tok}</span>
+            </div>
+
+            <div style="display: flex; height: 8px; width: 100%; background: var(--background-fill-secondary, #e2e8f0); border-radius: 4px; overflow: hidden; margin-bottom: 6px;">
+                <div style="width: {p_pct}%; background: #d97706;" title="Prompt Tokens: {p_tok} ({p_pct}%)"></div>
+                <div style="width: {c_pct}%; background: #7c3aed;" title="Completion Tokens: {c_tok} ({c_pct}%)"></div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 11px;">
+                <div style="background: var(--background-fill-primary, #ffffff); border: 1px solid var(--border-color-primary, #e2e8f0); border-radius: 4px; padding: 4px 6px;">
+                    <div style="color: var(--body-text-color-subdued, #64748b); font-size: 10px; font-weight: 600;">
+                        <span style="display: inline-block; width: 7px; height: 7px; background: #d97706; border-radius: 2px; margin-right: 3px;"></span>Prompt (In)
+                    </div>
+                    <div style="font-weight: 600; color: var(--body-text-color, #0f172a); margin-top: 1px;">{p_tok} <span style="font-size: 10px; opacity: 0.7;">({p_pct}%)</span></div>
+                </div>
+                <div style="background: var(--background-fill-primary, #ffffff); border: 1px solid var(--border-color-primary, #e2e8f0); border-radius: 4px; padding: 4px 6px;">
+                    <div style="color: var(--body-text-color-subdued, #64748b); font-size: 10px; font-weight: 600;">
+                        <span style="display: inline-block; width: 7px; height: 7px; background: #7c3aed; border-radius: 2px; margin-right: 3px;"></span>Completion (Out)
+                    </div>
+                    <div style="font-weight: 600; color: var(--body-text-color, #0f172a); margin-top: 1px;">{c_tok} <span style="font-size: 10px; opacity: 0.7;">({c_pct}%)</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    """
+
 def _format_knowledge_cards(docs: list) -> str:
     if not docs:
-        return "<p style='color: #64748b; font-style: italic; padding: 12px 0;'>No documents retrieved yet.</p>"
+        return "<p style='color: var(--body-text-color-subdued, #64748b); font-style: italic; padding: 12px 0;'>No documents retrieved yet.</p>"
     cards = []
     for i, doc in enumerate(docs):
         text = html.escape(doc.strip())
         card = (
-            f"<div style='background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; "
-            f"overflow: hidden; margin-bottom: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.04);'>"
-            f"<div style='background: #f1f5f9; border-bottom: 1px solid #e2e8f0; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center;'>"
-            f"<span style='font-weight: 600; font-size: 12px; color: #334155;'>Document Snippet #{i + 1}</span>"
-            f"<span style='font-size: 11px; background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 4px; font-weight: 500;'>ChromaDB Context</span>"
+            f"<div style='background: var(--block-background-fill, #f8fafc); border: 1px solid var(--border-color-primary, #e2e8f0); border-radius: 8px; "
+            f"overflow: hidden; margin-bottom: 12px;'>"
+            f"<div style='background: var(--background-fill-secondary, #f1f5f9); border-bottom: 1px solid var(--border-color-primary, #e2e8f0); padding: 7px 12px; display: flex; justify-content: space-between; align-items: center;'>"
+            f"<span style='font-weight: 600; font-size: 12px; color: var(--body-text-color, #334155);'>Document Snippet #{i + 1}</span>"
+            f"<span style='font-size: 10px; background: var(--background-fill-primary, #e2e8f0); color: var(--body-text-color-subdued, #475569); padding: 2px 7px; border-radius: 4px; font-weight: 500;'>ChromaDB Context</span>"
             f"</div>"
-            f"<div style='padding: 14px 16px; font-size: 13.5px; color: #0f172a; line-height: 1.6; white-space: pre-wrap; font-family: ui-sans-serif, system-ui, sans-serif;'>{text}</div>"
+            f"<div style='padding: 12px 14px; font-size: 13px; color: var(--body-text-color, #0f172a); line-height: 1.6; white-space: pre-wrap; font-family: inherit;'>{text}</div>"
             f"</div>"
         )
         cards.append(card)
@@ -35,7 +127,7 @@ def _format_knowledge_cards(docs: list) -> str:
 
 def process_normal(query: str):
     if not query.strip():
-        return ('Please enter a query.', '', '', '', '0.0/1.0', '', '')
+        return ('Please enter a query.', '', '', '', '0.0/1.0', '', '', _format_metrics_cards())
     try:
         resp = requests.post(f'{API_BASE}/query', json={'query': query}, timeout=300)
         if resp.status_code == 200:
@@ -60,23 +152,34 @@ def process_normal(query: str):
                     detail = f' — *{ticket_key} on {crm_server}*'
                 steps_items.append(f'- **`[Done]`** **{step_name.replace("_", " ").title()}**{detail}')
             steps_log = '\n\n'.join(steps_items) if steps_items else 'Completed.'
-            return (final_answer, reasoning, knowledge, tools, score, intent_md, steps_log)
+            metrics_html = _format_metrics_cards(data.get('metrics', {}))
+            return (final_answer, reasoning, knowledge, tools, score, intent_md, steps_log, metrics_html)
         else:
-            return (f'Backend Error: {resp.status_code}', '', '', '', '0.0', '', '')
+            return (f'Backend Error: {resp.status_code}', '', '', '', '0.0', '', '', _format_metrics_cards())
     except Exception as e:
-        return (f'Connection Error: {str(e)}', '', '', '', '0.0', '', '')
+        return (f'Connection Error: {str(e)}', '', '', '', '0.0', '', '', _format_metrics_cards())
 
 def process_streaming(query: str, token_mode: bool) -> Generator:
     if not query.strip():
-        yield ('Please enter a query.', '', '', '', '0.0/1.0', '', '')
+        yield ('Please enter a query.', '', '', '', '0.0/1.0', '', '', _format_metrics_cards())
         return
     if not WS_AVAILABLE:
-        yield ('websocket-client not installed. Run: pip install websocket-client\nOr switch to Normal Mode.', '', '', '', '0.0', '', '')
+        yield ('websocket-client not installed. Run: pip install websocket-client\nOr switch to Normal Mode.', '', '', '', '0.0', '', '', _format_metrics_cards())
         return
     session_id = str(uuid.uuid4())
     ws_url = f'{WS_BASE}/ws/{session_id}'
     streaming_mode = 'tokens' if token_mode else 'steps'
-    state = {'answer': 'Waiting for agent...', 'reasoning': '', 'knowledge': _format_knowledge_cards([]), 'tools': '', 'score': '—', 'intent_md': '', 'steps': [], 'token_buffer': ''}
+    state = {
+        'answer': 'Waiting for agent...',
+        'reasoning': '',
+        'knowledge': _format_knowledge_cards([]),
+        'tools': '',
+        'score': '—',
+        'intent_md': '',
+        'steps': [],
+        'token_buffer': '',
+        'metrics_html': _format_metrics_cards()
+    }
 
     def _render_steps(steps: list) -> str:
         if not steps:
@@ -93,7 +196,7 @@ def process_streaming(query: str, token_mode: bool) -> Generator:
         conn.send(json.dumps({'query': query, 'streaming_mode': streaming_mode}))
         state['steps'] = []
         state['answer'] = 'Agent is processing...'
-        yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']))
+        yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']), state['metrics_html'])
         while True:
             try:
                 raw = conn.recv()
@@ -102,7 +205,7 @@ def process_streaming(query: str, token_mode: bool) -> Generator:
                 event = json.loads(raw)
             except Exception as e:
                 state['answer'] = f'Stream error: {e}'
-                yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']))
+                yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']), state['metrics_html'])
                 break
             etype = event.get('type', '')
             data = event.get('data', {})
@@ -181,22 +284,24 @@ def process_streaming(query: str, token_mode: bool) -> Generator:
                 docs = data.get('retrieved_docs', [])
                 if docs and state['knowledge'] == _format_knowledge_cards([]):
                     state['knowledge'] = _format_knowledge_cards(docs)
+                if data.get('metrics'):
+                    state['metrics_html'] = _format_metrics_cards(data.get('metrics'))
                 for s in state['steps']:
                     if s.get('active'):
                         s['done'] = True
                         s['active'] = False
-                yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']))
+                yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']), state['metrics_html'])
                 break
             elif etype == 'fatal_error':
                 state['answer'] = f'Fatal error: {data.get("message", "Unknown error")}'
-                yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']))
+                yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']), state['metrics_html'])
                 break
             if etype not in ('token',):
-                yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']))
+                yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']), state['metrics_html'])
             elif etype == 'token' and len(state['token_buffer']) % 20 == 0:
-                yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']))
+                yield (state['answer'], state['reasoning'], state['knowledge'], state['tools'], state['score'], state['intent_md'], _render_steps(state['steps']), state['metrics_html'])
     except Exception as e:
-        yield (f'WebSocket connection failed: {e}\n\nMake sure the API is running at {API_BASE}', '', '', '', '0.0', '', '')
+        yield (f'WebSocket connection failed: {e}\n\nMake sure the API is running at {API_BASE}', '', '', '', '0.0', '', '', _format_metrics_cards())
     finally:
         try:
             conn.close()
@@ -225,8 +330,12 @@ theme = gr.themes.Default(primary_hue='blue', neutral_hue='slate', font=[gr.them
 css = '\n.container { max-width: 1400px; margin: auto; padding-top: 20px; }\n.header-text { color: #111827; font-weight: 600; margin-bottom: 2px; }\n.sub-text { color: #4B5563; margin-bottom: 30px; }\n.gr-box { border-radius: 8px; }\n.streaming-badge { \n    background: linear-gradient(90deg, #3b82f6, #8b5cf6);\n    color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;\n}\ndiv[data-testid="example-btn"] { \n    white-space: nowrap !important; \n    overflow: hidden !important; \n    text-overflow: ellipsis !important; \n}\n'
 with gr.Blocks(title='Agentic CRM Support', theme=theme, css=css) as demo:
     with gr.Column(elem_classes='container'):
-        gr.Markdown('# Agentic CRM Support', elem_classes='header-text')
-        gr.Markdown('**RAG** + **LangGraph** + **Multi-MCP CRM** (Jira · Linear)', elem_classes='sub-text')
+        with gr.Row(equal_height=False):
+            with gr.Column(scale=7):
+                gr.Markdown('# Agentic CRM Support', elem_classes='header-text')
+                gr.Markdown('**RAG** + **LangGraph** + **Multi-MCP CRM** (Jira · Linear)', elem_classes='sub-text')
+            with gr.Column(scale=5):
+                metrics_output = gr.HTML(value=_format_metrics_cards(), label='Telemetry & Metrics')
         with gr.Row():
             with gr.Column(scale=1):
                 gr.Markdown('### Input Panel')
@@ -251,6 +360,10 @@ with gr.Blocks(title='Agentic CRM Support', theme=theme, css=css) as demo:
                         knowledge_output = gr.HTML(value=_format_knowledge_cards([]), label='ChromaDB Retrieved Snippets')
                     with gr.TabItem('Tool Invocations'):
                         tools_output = gr.Code(language='json', label='MCP CRM Tool Payloads (Jira · Linear)')
-    submit_btn.click(fn=dispatch, inputs=[query_input, streaming_toggle, token_mode_toggle], outputs=[answer_output, reasoning_output, knowledge_output, tools_output, score_output, intent_output, steps_output])
+    submit_btn.click(
+        fn=dispatch,
+        inputs=[query_input, streaming_toggle, token_mode_toggle],
+        outputs=[answer_output, reasoning_output, knowledge_output, tools_output, score_output, intent_output, steps_output, metrics_output]
+    )
 if __name__ == '__main__':
     demo.launch(server_name='0.0.0.0', server_port=7860, share=False)
