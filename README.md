@@ -8,8 +8,6 @@
   Your browser does not support the video tag.
 </video>
 
-> [Working Demo]([https://4t-audio.vercel.app/blog/agentic-crm-support](https://github.com/iam4tart/agentic-crm-support/raw/main/video/agentic.mp4))
-
 ![workflow](assets/arch.svg)
 
 
