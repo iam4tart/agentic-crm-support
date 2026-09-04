@@ -15,3 +15,12 @@ class GraphState(TypedDict):
     event_source: str
     ws_session_id: str
     streaming_mode: str
+    start_time: float
+    total_latency_ms: float
+    retrieval_latency_ms: float
+    llm_latency_ms: float
+    mcp_latency_ms: float
+    prompt_tokens: int
+    completion_tokens: int
+    total_tokens: int
+    failure_reason: str
