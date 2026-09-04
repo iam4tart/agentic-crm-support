@@ -3,10 +3,9 @@
 
 > [THINKING BLOG (old)](https://4t-audio.vercel.app/blog/agentic-crm-support)
 
-<video src="https://github.com/iam4tart/agentic-crm-support/raw/main/video/agentic.mp4" controls="controls" width="100%">
-  <source src="video/agentic.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+[![Watch the Demo](https://img.youtube.com/vi/pyCAqlIfcKA/maxresdefault.jpg)](https://youtu.be/pyCAqlIfcKA)
+
+> **Demo Video:** [https://youtu.be/pyCAqlIfcKA](https://youtu.be/pyCAqlIfcKA)
 
 ![workflow](assets/arch.svg)
 
