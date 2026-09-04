@@ -21,6 +21,20 @@ class Reasoner:
                 return response.choices[0].message.content
             except Exception as e:
                 last_error = str(e)
+                if 'NameResolutionError' in last_error or 'api-inference.huggingface.co' in last_error or attempt == 2:
+                    try:
+                        import requests
+                        url = 'https://router.huggingface.co/novita/v3/openai/chat/completions'
+                        headers = {'Authorization': f'Bearer {settings.HF_TOKEN}'}
+                        payload = {'model': 'qwen/qwen-2.5-72b-instruct', 'messages': messages, 'max_tokens': max_tokens, 'temperature': 0.1}
+                        r = requests.post(url, headers=headers, json=payload, timeout=30)
+                        if r.status_code == 200:
+                            data = r.json()
+                            choices = data.get('choices', [])
+                            if choices:
+                                return choices[0].get('message', {}).get('content', '')
+                    except Exception as router_e:
+                        logger.warning(f'[Reasoner] Router fallback failed: {router_e}')
                 if '503' in last_error or 'Model loading' in last_error:
                     wait = 15 * (attempt + 1)
                     logger.warning(f'[Reasoner] Model loading, waiting {wait}s...')
