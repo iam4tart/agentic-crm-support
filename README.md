@@ -3,6 +3,7 @@
 
 > [THINKING BLOG (old)](https://4t-audio.vercel.app/blog/agentic-crm-support)
 
+Click to watch working demo:
 [![Watch the Demo](https://img.youtube.com/vi/pyCAqlIfcKA/maxresdefault.jpg)](https://youtu.be/pyCAqlIfcKA)
 
 ![workflow](assets/arch.svg)
