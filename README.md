@@ -5,8 +5,6 @@
 
 [![Watch the Demo](https://img.youtube.com/vi/pyCAqlIfcKA/maxresdefault.jpg)](https://youtu.be/pyCAqlIfcKA)
 
-> **Demo Video:** [https://youtu.be/pyCAqlIfcKA](https://youtu.be/pyCAqlIfcKA)
-
 ![workflow](assets/arch.svg)
 
 
