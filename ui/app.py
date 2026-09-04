@@ -45,7 +45,7 @@ def process_normal(query: str):
             docs = data.get('retrieved_docs', [])
             knowledge = _format_knowledge_cards(docs)
             tools = json.dumps(data.get('tool_outputs', []), indent=2)
-            score = f'{data.get('evaluation_score', 0.0):.2f}/1.0'
+            score = f'{data.get("evaluation_score", 0.0):.2f}/1.0'
             intent = data.get('intent', 'general')
             crm_server = data.get('crm_server', 'jira')
             ticket_key = data.get('ticket_key', '')
