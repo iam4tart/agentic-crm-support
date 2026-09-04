@@ -3,7 +3,7 @@ from loguru import logger
 from tools.jira import JiraTools
 from tools.linear import LinearTools
 ROUTING: Dict[str, str] = {'technical': 'jira', 'billing': 'jira', 'product': 'linear', 'escalate': 'linear', 'general': 'jira'}
-CRM_LABELS: Dict[str, str] = {'jira': '🐛 Jira (Engineering)', 'linear': '📐 Linear (Product)'}
+CRM_LABELS: Dict[str, str] = {'jira': 'Jira (Engineering)', 'linear': 'Linear (Product)'}
 
 def resolve_server(intent: str) -> str:
     return ROUTING.get(intent.lower(), 'jira')
@@ -22,7 +22,16 @@ class CRMRouter:
             if server == 'jira':
                 return await JiraTools.create_issue(summary=summary, description=description, project_key=kwargs.get('project_key'), issue_type=kwargs.get('issue_type', 'Task'), priority=priority)
             elif server == 'linear':
-                return await LinearTools.create_issue(title=summary, description=description, priority=priority.lower(), team=kwargs.get('team', 'Engineering'))
+                try:
+                    res = await LinearTools.create_issue(title=summary, description=description, priority=priority.lower(), team=kwargs.get('team', 'Engineering'))
+                    if res.get('key'):
+                        return res
+                    logger.warning(f'[CRMRouter] Linear creation did not return key ({res.get("error")}). Falling back to Jira.')
+                except Exception as e:
+                    logger.warning(f'[CRMRouter] Linear creation threw error: {e}. Falling back to Jira.')
+                prefix = "[Feature Request]" if intent == "product" else "[Urgent Escalation]"
+                fallback_priority = 'Medium' if intent == 'product' else 'High'
+                return await JiraTools.create_issue(summary=f"{prefix} {summary}", description=description, project_key=kwargs.get('project_key'), issue_type=kwargs.get('issue_type', 'Task'), priority=fallback_priority)
         except Exception as e:
             logger.error(f'[CRMRouter] create_ticket failed on {server}: {e}')
             return {'key': '', 'error': str(e), 'source': server, 'status': 'error'}

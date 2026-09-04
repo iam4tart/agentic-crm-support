@@ -102,7 +102,7 @@ class WorkflowNodes:
                     docs = self.retriever.retrieve(query)
                     retrieved_docs.extend(docs)
                     updates['retrieved_docs'] = retrieved_docs
-                    _emit(state, 'step_complete', {'step': 'retrieve', 'doc_count': len(docs)})
+                    _emit(state, 'step_complete', {'step': 'retrieve', 'doc_count': len(docs), 'docs': docs})
                 except Exception as e:
                     logger.error(f'[Execute] Retrieval error: {e}')
                     tool_outputs.append({'type': 'error', 'step': 'retrieve', 'message': str(e)})
@@ -111,7 +111,10 @@ class WorkflowNodes:
                 try:
                     already_created = any((out.get('type') in ('crm_create', 'jira_create') for out in tool_outputs))
                     query_lower = query.lower()
-                    wants_create = any((kw in query_lower for kw in ('create', 'open', 'file', 'raise', 'submit', 'ticket', 'issue', 'escalate', 'down'))) or intent == 'escalate'
+                    wants_create = (
+                        any(kw in query_lower for kw in ('create', 'open', 'file', 'raise', 'submit', 'ticket', 'issue', 'escalate', 'down', 'feature', 'request', 'suggest', 'add', 'implement'))
+                        or intent in ('escalate', 'product')
+                    )
                     wants_resolve = any((kw in query_lower for kw in ('resolve', 'close', 'done', 'fixed', 'complete')))
                     if wants_resolve and ticket_key:
                         _emit(state, 'tool_call', {'server': crm_server, 'tool': 'resolve_ticket', 'ticket_key': ticket_key})
@@ -186,7 +189,7 @@ class WorkflowNodes:
         retries = state.get('retry_count', 0)
         if score >= 0.7 or retries >= settings.MAX_RETRIES:
             logger.info(f'[Gate] Ending. Score={score:.2f}, Retries={retries}')
-            _emit(state, 'done', {'final_answer': state.get('final_answer', ''), 'score': score, 'ticket_key': state.get('ticket_key', ''), 'crm_server': state.get('crm_server', '')})
+            _emit(state, 'done', {'final_answer': state.get('final_answer', ''), 'score': score, 'ticket_key': state.get('ticket_key', ''), 'crm_server': state.get('crm_server', ''), 'retrieved_docs': state.get('retrieved_docs', [])})
             return 'end'
         logger.info(f'[Gate] Retrying. Score={score:.2f}, Retries={retries}')
         _emit(state, 'retry', {'score': score, 'retry_count': retries})

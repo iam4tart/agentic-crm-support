@@ -60,5 +60,5 @@ class Reasoner:
 
     @traceable(name='Generate_Final_Response')
     def generate_response(self, query: str, context: str, tools: str) -> str:
-        messages = [{'role': 'system', 'content': 'You are a Customer Support Expert. Use the provided Context and Tool results to give a DIRECT answer.'}, {'role': 'user', 'content': f'Context Knowledge Base:\n{context}\n\nTool Results:\n{tools}\n\nUser Question: {query}'}]
-        return self._query_api(messages, max_tokens=800)
+        messages = [{'role': 'system', 'content': 'You are a Customer Support Expert. Use the provided Context and Tool results to give a DIRECT, concise answer.'}, {'role': 'user', 'content': f'Context Knowledge Base:\n{context}\n\nTool Results:\n{tools}\n\nUser Question: {query}'}]
+        return self._query_api(messages, max_tokens=400)

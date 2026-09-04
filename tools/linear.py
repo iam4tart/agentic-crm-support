@@ -46,7 +46,14 @@ class LinearTools:
             data = json.loads(text)
         except Exception:
             data = {'raw': text}
-        return {'key': data.get('id', ''), 'title': title, 'team': team, 'status': 'open', 'data': data, 'source': 'linear', 'url': data.get('ticket_url', '')}
+        key = data.get('key') or data.get('identifier')
+        if not key and data.get('ticket_url'):
+            url_match = re.search(r'/issue/([A-Z0-9]+-\d+)', data['ticket_url'])
+            if url_match:
+                key = url_match.group(1)
+        if not key:
+            key = data.get('id', '')
+        return {'key': key, 'title': title, 'team': team, 'status': 'open', 'data': data, 'source': 'linear', 'url': data.get('ticket_url', '')}
 
     @classmethod
     async def get_issue(cls, issue_id: str) -> Dict[str, Any]:
@@ -80,8 +87,16 @@ class LinearTools:
         text = _extract_text(result)
         try:
             data = json.loads(text)
-            tickets = data.get('nodes', [])
-            return [{'key': t['id'], 'title': t['title'], 'status': t.get('state', {}).get('name', ''), 'source': 'linear'} for t in tickets]
+            tickets = data.get('issues', []) or data.get('nodes', [])
+            return [
+                {
+                    'key': t.get('identifier') or t.get('id', ''),
+                    'title': t.get('title', ''),
+                    'status': t.get('state', {}).get('name', '') if isinstance(t.get('state'), dict) else str(t.get('state') or ''),
+                    'source': 'linear'
+                }
+                for t in tickets
+            ]
         except Exception:
             return []
 

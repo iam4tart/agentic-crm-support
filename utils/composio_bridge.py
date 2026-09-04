@@ -107,12 +107,21 @@ class _ComposioResult:
         self._raw = raw
         self._action = action
         import json
-        if isinstance(raw, dict):
-            text = json.dumps(raw, indent=2)
+        if hasattr(raw, 'data') and raw.data is not None:
+            data = raw.data
+        elif isinstance(raw, dict):
+            data = raw
         else:
-            text = str(raw)
+            data = str(raw)
+
+        if isinstance(data, (dict, list)):
+            text = json.dumps(data, indent=2)
+        else:
+            text = str(data)
+
+        self.data = data if isinstance(data, dict) else {}
         self.content = [_TextContent(text)]
-        self.is_error = isinstance(raw, dict) and raw.get('error')
+        self.is_error = bool(getattr(raw, 'error', None) or (isinstance(data, dict) and data.get('error')))
 
 class _TextContent:
 

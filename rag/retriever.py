@@ -1,3 +1,4 @@
+import requests
 import chromadb
 from chromadb.config import Settings
 from config.settings import settings
@@ -28,6 +29,16 @@ class Retriever:
     @traceable(name='Embedding_Generation')
     def _get_embeddings(self, texts: List[str]) -> List[List[float]]:
         try:
+            url = f'https://router.huggingface.co/hf-inference/models/{settings.EMBEDDING_MODEL}'
+            headers = {'Authorization': f'Bearer {settings.HF_TOKEN}'}
+            resp = requests.post(url, headers=headers, json={'inputs': texts}, timeout=30)
+            if resp.status_code == 200:
+                data = resp.json()
+                if isinstance(data, list) and data and isinstance(data[0], list):
+                    return data
+                elif isinstance(data, list) and data and isinstance(data[0], (int, float)):
+                    return [data]
+            logger.warning(f'Router embedding returned status {resp.status_code}: {resp.text[:100]}')
             embeddings = self.client.feature_extraction(texts, model=settings.EMBEDDING_MODEL)
             if hasattr(embeddings, 'tolist'):
                 return embeddings.tolist()
